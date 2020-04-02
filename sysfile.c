@@ -442,3 +442,18 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int sys_alsoNice(void){  
+
+  int n;
+
+  if(argint(0, &n) <= 0){
+    return -1;
+  }
+
+  myproc()->counter = 0;
+  myproc()->tslice = n;
+  
+
+  return 0;
+}

@@ -8,11 +8,11 @@
 #include "spinlock.h"
 
 struct {
-  struct spinlock lock;
+  struct spinlock lock; 
   struct proc proc[NPROC];
-} ptable;
+} ptable; 
 
-static struct proc *initproc;
+static struct proc *initproc; 
 
 int nextpid = 1;
 extern void forkret(void);
@@ -52,6 +52,7 @@ mycpu(void)
   panic("unknown apicid\n");
 }
 
+
 // Disable interrupts so that we are not rescheduled
 // while reading proc from the cpu structure
 struct proc*
@@ -64,6 +65,21 @@ myproc(void) {
   popcli();
   return p;
 }
+
+
+
+// copy of function form syscall, avoid import error. 
+int
+uptime(void)
+{
+  uint xticks;
+
+  acquire(&tickslock);
+  xticks = ticks;
+  release(&tickslock);
+  return xticks;
+}
+
 
 //PAGEBREAK: 32
 // Look in the process table for an UNUSED proc.
@@ -79,9 +95,11 @@ allocproc(void)
   acquire(&ptable.lock);
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
-    if(p->state == UNUSED)
+    if(p->state == UNUSED){
+      p->arrive = uptime();
+      //cprintf("Arrival time: %d\n", p->arrive);
       goto found;
-
+    }
   release(&ptable.lock);
   return 0;
 
@@ -231,6 +249,12 @@ exit(void)
   struct proc *p;
   int fd;
 
+ 
+  curproc -> end = uptime() - (curproc-> arrive);
+  
+  cprintf("process %d ran for %d ticks...\n" , curproc->pid, curproc->end);
+
+
   if(curproc == initproc)
     panic("init exiting");
 
@@ -342,7 +366,6 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
@@ -354,6 +377,15 @@ scheduler(void)
 
   }
 }
+
+void upCounter(void){
+  acquire(&ptable.lock);
+
+  myproc()->counter++;
+
+  release(&ptable.lock);
+}
+
 
 // Enter scheduler.  Must hold only ptable.lock
 // and have changed proc->state. Saves and restores
@@ -532,3 +564,5 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+
