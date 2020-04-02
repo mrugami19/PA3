@@ -185,6 +185,7 @@ UPROGS=\
 	_whatIf\
 	_testpa\
 	_testnice\
+	_v2ptest\
 
 fs.img: mkfs README textFile.txt $(UPROGS)
 	./mkfs fs.img README textFile.txt $(UPROGS)
@@ -261,6 +262,7 @@ EXTRA=\
 	whatif.c\
 	testpa.c\
 	testnice.c\
+	v2ptest.c\
 
 dist:
 	rm -rf dist
