@@ -90,3 +90,12 @@ sys_uptime(void)
   return xticks;
 }
 
+int sys_myV2p(void){
+
+  int instr = 0;
+  char *va;
+  
+  argstr(0, &va);
+  argint(1, &instr);
+
+}

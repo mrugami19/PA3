@@ -24,7 +24,8 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int alsoNice(int); //added 
-int myV2p(int, char);
+int myV2p(char*, int); //added
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);

@@ -103,8 +103,8 @@ extern int sys_unlink(void);
 extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
-extern int sys_alsoNice(void); //added
 extern int sys_myV2p(void);
+extern int sys_alsoNice(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -128,8 +128,8 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_alsoNice]  sys_alsoNice, // added 
-[SYS_alsoNice]  sys_myV2p,
+[SYS_alsoNice] sys_alsoNice,
+[SYS_myV2p]   sys_myV2p,
 };
 
 void
