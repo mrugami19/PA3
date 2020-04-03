@@ -186,6 +186,7 @@ UPROGS=\
 	_testpa\
 	_testnice\
 	_v2ptest\
+	_v2ptest2\
 
 fs.img: mkfs README textFile.txt $(UPROGS)
 	./mkfs fs.img README textFile.txt $(UPROGS)
@@ -263,6 +264,7 @@ EXTRA=\
 	testpa.c\
 	testnice.c\
 	v2ptest.c\
+	v2ptest2.c\
 
 dist:
 	rm -rf dist

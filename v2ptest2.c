@@ -6,8 +6,8 @@ int main(void)
 {
 
     char *va;
-    char i = '5';
-    va = &i;
+    char z = '7';
+    va = &z;
 
     printf(1, "\n Virtual address: %x\n", &va);
     myV2p(va, 0);

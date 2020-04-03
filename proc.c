@@ -252,7 +252,7 @@ exit(void)
  
   curproc -> end = uptime() - (curproc-> arrive);
   
-  cprintf("process %d ran for %d ticks...\n" , curproc->pid, curproc->end);
+  // cprintf("process %d ran for %d ticks...\n" , curproc->pid, curproc->end);
 
 
   if(curproc == initproc)
@@ -564,5 +564,3 @@ procdump(void)
     cprintf("\n");
   }
 }
-
-

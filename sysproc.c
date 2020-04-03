@@ -98,5 +98,24 @@ int sys_myV2p(void)
   argstr(0, &va);
   argint(1, &instr);
 
+  
+  pde_t *pde;
+  pte_t *pgtab, *pgdir;
+  pgdir = myproc()->pgdir;
+
+  unsigned offset = (int)va % 4096; //last 12 bits 
+
+  pde = &pgdir[PDX(va)];
+  if(*pde & PTE_P)
+  {
+  	pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
+	cprintf("\npagetb:  %d", pgtab, "\noffset:  %x", offset);
+  }
+  else
+  {
+	cprintf("\n Invalid Virtual Address! \n");
+	return -1;
+  }
+	
   return 0;
 }
