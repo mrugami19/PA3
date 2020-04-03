@@ -111,6 +111,7 @@ int sys_myV2p(void)
   if(*pde & PTE_P)
   {
   	pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
+  cprintf("\npagedir:  %d\n", pgdir);
 	cprintf("\npagetb:  %d\n", pgtab);
   cprintf("\noffset:  %x\n", offset);
   }
