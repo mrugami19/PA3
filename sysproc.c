@@ -99,7 +99,7 @@ int sys_myV2p(void)
   argint(1, &instr);
 
 
-  int physical_address;
+  int *physical_address;
   pde_t *pgdir,*pgtab,*pde;
   pgdir = myproc()->pgdir;
 
@@ -123,9 +123,9 @@ int sys_myV2p(void)
       if(*pde & PTE_W){
         pte_t *pte;
         pte = &pgtab[PTX(va)];
-       physical_address=(char*)V2P(PTE_ADDR(*pte));
+       physical_address=(int*)V2P(PTE_ADDR(*pte));
 
-       cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address);
+       cprintf(" --PHYSICAL ADDRESS-- %x\n", &physical_address);
       }
       else
       {
@@ -136,7 +136,7 @@ int sys_myV2p(void)
     else{
       pte_t *pte;
     pte = &pgtab[PTX(va)];
-    physical_address=(char*)V2P(PTE_ADDR(*pte));
+    physical_address=(int*)V2P(PTE_ADDR(*pte));
 
     cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address);
     }
