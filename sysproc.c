@@ -105,11 +105,14 @@ int sys_myV2p(void)
 
   unsigned offset = (int)va % 4096; //last 12 bits 
 
+  //unsigned offset = (int)va & ((1u<<12)-1); 
+  // cprintf("")
   pde = &pgdir[PDX(va)];
   if(*pde & PTE_P)
   {
   	pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
-	cprintf("\npagetb:  %d", pgtab, "\noffset:  %x", offset);
+	cprintf("\npagetb:  %d\n", pgtab);
+  cprintf("\noffset:  %x\n", offset);
   }
   else
   {
