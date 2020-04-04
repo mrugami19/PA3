@@ -105,6 +105,7 @@ extern int sys_write(void);
 extern int sys_uptime(void);
 extern int sys_myV2p(void);
 extern int sys_alsoNice(void);
+extern int sys_myPages(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -130,6 +131,7 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_alsoNice] sys_alsoNice,
 [SYS_myV2p]   sys_myV2p,
+[SYS_myPages] sys_myPages,
 };
 
 void

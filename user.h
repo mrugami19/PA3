@@ -25,6 +25,7 @@ int sleep(int);
 int uptime(void);
 int alsoNice(int); //added 
 int myV2p(const void*, int); //added
+int myPages(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

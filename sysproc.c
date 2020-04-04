@@ -141,9 +141,20 @@ int sys_myV2p(void)
     cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address+offset);
     }
 
-  
-
     return 0;
+
+}
+
+int sys_myPages(void){
+
+  int pid;
+
+  argint(0, &pid);
+  cprintf("-- pid: %d--\n", pid);
+
+  return 0;
+
+}
 
   /*
   pde_t *pde;
@@ -172,4 +183,3 @@ int sys_myV2p(void)
 
 
   //return 0;
-}

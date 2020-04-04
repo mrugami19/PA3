@@ -22,3 +22,4 @@
 #define SYS_close  21
 #define SYS_alsoNice 22
 #define SYS_myV2p  23
+#define SYS_myPages 24
