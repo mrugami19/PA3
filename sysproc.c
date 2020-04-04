@@ -99,7 +99,7 @@ int sys_myV2p(void)
   argint(1, &instr);
 
   unsigned offset = (int)va % 4096; //last 12 bits 
-  int *physical_address;
+  unsigned int *physical_address;
   pde_t *pgdir,*pgtab,*pde;
   pgdir = myproc()->pgdir;
   cprintf("\n--- offset:  %x---- \n", offset);
@@ -123,7 +123,7 @@ int sys_myV2p(void)
       if(*pde & PTE_W){
         pte_t *pte;
         pte = &pgtab[PTX(va)];
-       physical_address=(int*)V2P(PTE_ADDR(*pte));
+       physical_address=(unsigned int*)V2P(PTE_ADDR(*pte));
 
        cprintf(" --PHYSICAL ADDRESS-- %x\n", physical_address+offset);
       }
@@ -136,19 +136,28 @@ int sys_myV2p(void)
     else{
       pte_t *pte;
     pte = &pgtab[PTX(va)];
-    physical_address=(int*)V2P(PTE_ADDR(*pte));
+    physical_address=(unsigned int*)V2P(PTE_ADDR(*pte));
 
-    cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address+offset);
+    cprintf(" --PHYSICAL ADDRESS-- %x\n",physical_address+offset);
     }
 
     return 0;
 
 }
 
+
+// 1. pages that are dirty
+// 2. pages that are accessible
+// 3. pages that are writable
+// 4. pages that are in user space
+// pages for dynamic data
+// stack 
+// data+txt
+ 
 int sys_myPages(void){
 
   int pid;
-
+  
   argint(0, &pid);
   cprintf("-- pid: %d--\n", pid);
 
@@ -156,30 +165,3 @@ int sys_myPages(void){
 
 }
 
-  /*
-  pde_t *pde;
-  pte_t *pgtab, *pgdir;
-  pgdir = myproc()->pgdir;
-
-  unsigned offset = (int)va % 4096; //last 12 bits 
-
-  //unsigned offset = (int)va & ((1u<<12)-1); 
-  // cprintf("")
-  pde = &pgdir[PDX(va)];
-  if(*pde & PTE_P)
-  {
-  	pgtab = (pte_t*)P2V(PTE_ADDR(*pde));
-  cprintf("\npagedir:  %d\n", pgdir);
-	cprintf("\npagetb:  %d\n", pgtab);
-  cprintf("\noffset:  %x\n", offset);
-  }
-  else
-  {
-	cprintf("\n Invalid Virtual Address! \n");
-	return -1;
-  }
-	*/
-
-
-
-  //return 0;
