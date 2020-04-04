@@ -98,11 +98,11 @@ int sys_myV2p(void)
   argstr(0, &va);
   argint(1, &instr);
 
-
+  unsigned offset = (int)va % 4096; //last 12 bits 
   int *physical_address;
   pde_t *pgdir,*pgtab,*pde;
   pgdir = myproc()->pgdir;
-
+  cprintf("\n--- offset:  %x---- \n", offset);
     //must initialise pgdir
 
     pde = &pgdir[PDX(va)];
@@ -125,7 +125,7 @@ int sys_myV2p(void)
         pte = &pgtab[PTX(va)];
        physical_address=(int*)V2P(PTE_ADDR(*pte));
 
-       cprintf(" --PHYSICAL ADDRESS-- %x\n", &physical_address);
+       cprintf(" --PHYSICAL ADDRESS-- %x\n", physical_address+offset);
       }
       else
       {
@@ -138,7 +138,7 @@ int sys_myV2p(void)
     pte = &pgtab[PTX(va)];
     physical_address=(int*)V2P(PTE_ADDR(*pte));
 
-    cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address);
+    cprintf(" --PHYSICAL ADDRESS-- %d\n",physical_address+offset);
     }
 
   
