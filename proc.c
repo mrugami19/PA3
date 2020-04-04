@@ -564,3 +564,20 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+void 
+getInfo(int pid){
+  struct proc *p;
+
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->pid == pid){
+        cprintf("-- Found it! --\n");
+        cprintf("-- PGDIR:  %d--\n", p->pgdir);
+        //cprintf("Arrival time: %d\n", p->arrive);
+        
+      }
+  }
+   release(&ptable.lock);
+}
+   

@@ -153,14 +153,22 @@ int sys_myV2p(void)
 // pages for dynamic data
 // stack 
 // data+txt
- 
+
 int sys_myPages(void){
 
   int pid;
   
   argint(0, &pid);
   cprintf("-- pid: %d--\n", pid);
-
+  
+  getInfo(pid);
+  // for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  //   if(p->pid == pid){
+  //     cprintf("-- Found it! --");
+  //     //cprintf("Arrival time: %d\n", p->arrive);
+      
+  //   }
+  // release(&ptable.lock);
   return 0;
 
 }
