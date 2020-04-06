@@ -147,6 +147,7 @@ userinit(void)
   if((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
+  p->dataPages++;
   p->sz = PGSIZE;
   memset(p->tf, 0, sizeof(*p->tf));
   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
@@ -178,15 +179,20 @@ growproc(int n)
 {
   uint sz;
   struct proc *curproc = myproc();
-
   sz = curproc->sz;
   if(n > 0){
-    if((sz = allocuvm(curproc->pgdir, sz, sz + n)) == 0)
+    if((sz = allocuvm(curproc->pgdir, sz, sz + n)) == 0){
       return -1;
-  } else if(n < 0){
-    if((sz = deallocuvm(curproc->pgdir, sz, sz + n)) == 0)
+    }
+    curproc->heapPages++;
+  } 
+  else if(n < 0){
+    if((sz = deallocuvm(curproc->pgdir, sz, sz + n)) == 0){
       return -1;
+    }
+    curproc->heapPages--;
   }
+  
   curproc->sz = sz;
   switchuvm(curproc);
   return 0;
@@ -229,6 +235,9 @@ fork(void)
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
   pid = np->pid;
+  np->heapPages = curproc->heapPages;
+  np->stackPages = curproc->heapPages;
+  np->dataPages = curproc->dataPages;
 
   acquire(&ptable.lock);
 
@@ -564,20 +573,37 @@ procdump(void)
     cprintf("\n");
   }
 }
-
-void 
-getInfo(int pid){
-  struct proc *p;
-
-  acquire(&ptable.lock);
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->pid == pid){
-        cprintf("-- Found it! --\n");
-        cprintf("-- PGDIR:  %d--\n", p->pgdir);
-        //cprintf("Arrival time: %d\n", p->arrive);
-        
-      }
-  }
-   release(&ptable.lock);
-}
    
+void getInfo(int pid){
+	
+	struct proc *p;
+
+	  acquire(&ptable.lock);
+	  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if(p->pid == pid){
+      // cprintf("-- Found the process! --\n");
+      // cprintf("-- PGDIR:  %d--\n", p->pgdir);
+		  cprintf("---------------------------\n");
+		  cprintf("Pid: %d\n", p->pid);
+		  cprintf("# of Pages for Heap: %d\n", p->heapPages);
+		  cprintf("Addresses of Heap:\n");
+		  for(int i = 0; i < p->heapPages;i++){
+			  cprintf("	Page %d: VA = %d, PA = %d\n", i+1 , PGSIZE*(i+3),p->pgdir + PGSIZE*(i+3));
+		  }
+		  cprintf("# of Pages for Stack: %d (Including Guard Page)\n", p->stackPages);
+		  cprintf("Virtual Address of Stack: %d\n",PGSIZE*2);
+		  cprintf("Physical Address of Stack: %d\n", p->pgdir + PGSIZE*2);
+		  cprintf("# of Pages for data and txt: %d\n", p->dataPages);
+		  cprintf("Physical Address of data and txt: %d\n", p->pgdir);
+		  cprintf("Virtual Address of data and txt: %d\n", 0);
+		  cprintf("---------------------------\n");
+		  // Wake process from sleep if necessary.
+		  if(p->state == SLEEPING)
+			p->state = RUNNABLE;
+		  // release(&ptable.lock);
+		}
+	  }
+	  release(&ptable.lock);
+
+	
+}

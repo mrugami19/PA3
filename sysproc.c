@@ -92,7 +92,7 @@ sys_uptime(void)
 
 int sys_myV2p(void)
 {
-  int instr = 0;
+  int instr;
   char *va;
   
   argstr(0, &va);
@@ -131,14 +131,16 @@ int sys_myV2p(void)
       {
         cprintf("error, not writable");
       }
-      
+      cprintf("It's write!\n");
     }
     else{
-      pte_t *pte;
-    pte = &pgtab[PTX(va)];
-    physical_address=(unsigned int*)V2P(PTE_ADDR(*pte));
+      cprintf("It's read!\n");
 
-    cprintf(" --PHYSICAL ADDRESS-- %x\n",physical_address+offset);
+      pte_t *pte;
+      pte = &pgtab[PTX(va)];
+      physical_address=(unsigned int*)V2P(PTE_ADDR(*pte));
+
+      cprintf(" --PHYSICAL ADDRESS-- %x\n",physical_address+offset);
     }
 
     return 0;
@@ -160,7 +162,7 @@ int sys_myPages(void){
   
   argint(0, &pid);
   cprintf("-- pid: %d--\n", pid);
-  
+
   getInfo(pid);
   // for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   //   if(p->pid == pid){

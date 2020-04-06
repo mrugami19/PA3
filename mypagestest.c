@@ -6,8 +6,6 @@ int main(void)
 {
 
     
-
-    
     myPages(getpid());
     return 0;
     

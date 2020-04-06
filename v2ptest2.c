@@ -10,7 +10,7 @@ int main(void)
     va = &z;
 
     printf(1, "\n Virtual address: %x\n", &va);
-    myV2p(&va, 0);
+    myV2p(&va, 1);
     return 0;
     
   
